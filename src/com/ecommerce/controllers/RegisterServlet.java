@@ -9,6 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.wu.ecommerce.dto.User;
 import com.wu.ecommerce.exception.UserIdInvalidException;
@@ -82,6 +83,8 @@ public class RegisterServlet extends HttpServlet {
 			user2 = userService.addUser(user);
 			System.out.println(user2);
 			if (user2 != null) {
+				HttpSession httpSession = req.getSession();
+				httpSession.setAttribute("user", user2);
 				RequestDispatcher dispatcher = req.getRequestDispatcher("WEB-INF/views/dashboard.jsp");
 				dispatcher.forward(req, resp);
 			}
