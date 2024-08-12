@@ -41,17 +41,18 @@ public class RegisterServlet extends HttpServlet {
 		RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/views/registerPage.jsp");
 		dispatcher.forward(request, response);
 	}
+
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 //		super.doPost(req, resp);
 		System.out.println("apple");
-		
+
 		User user = new User();
 		String userId = req.getParameter("userId");
-		if(userId.isEmpty()) {
-			//somthing
-		}else {
+		if (userId.isEmpty()) {
+			// somthing
+		} else {
 			try {
 				user.setUserId(userId);
 			} catch (UserIdInvalidException e) {
@@ -59,32 +60,37 @@ public class RegisterServlet extends HttpServlet {
 				e.printStackTrace();
 			}
 		}
-		
+
 		String userEmail = req.getParameter("email");
-		if(userEmail.isEmpty()) {
-			//somthing
-		}else {
+		if (userEmail.isEmpty()) {
+			// somthing
+		} else {
 			user.setEmail(userEmail);
 		}
-		
+
 		String userPassword = req.getParameter("password");
-		if(userPassword.isEmpty()) {
-			//somthing
-		}else {
-			user.setPassword(userPassword );
+		if (userPassword.isEmpty()) {
+			// somthing
+		} else {
+			user.setPassword(userPassword);
 		}
-		
-		System.out.println(user);
-		
+
 		UserService userService = UserServiceImpl.getInstanve();
-		
+
+		User user2 = null;
 		try {
-			userService.addUser(user);
+			user2 = userService.addUser(user);
+			System.out.println(user2);
+			if (user2 != null) {
+				RequestDispatcher dispatcher = req.getRequestDispatcher("WEB-INF/views/dashboard.jsp");
+				dispatcher.forward(req, resp);
+			}
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
 
 }
