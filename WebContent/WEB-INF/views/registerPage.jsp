@@ -13,7 +13,7 @@
     <p>Please fill in this form to create an account.</p>
     <hr>
 
-	<label for="userId"><b>Email</b></label>
+	<label for="userName"><b>userName</b></label>
     <input type="text" placeholder="Enter id" name="userId" required>
 
     <label for="email"><b>Email</b></label>

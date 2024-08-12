@@ -2,8 +2,10 @@ package com.ecommerce.controllers;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -11,8 +13,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.wu.ecommerce.dto.Product;
 import com.wu.ecommerce.dto.User;
+import com.wu.ecommerce.exception.DataNotFoundException;
+import com.wu.ecommerce.exception.InvalidIdException;
+import com.wu.ecommerce.exception.InvalidPriceException;
 import com.wu.ecommerce.exception.UserIdInvalidException;
+import com.wu.ecommerce.service.ProductService;
+import com.wu.ecommerce.service.ProductServiceImpl;
 import com.wu.ecommerce.service.UserService;
 import com.wu.ecommerce.service.UserServiceImpl;
 
@@ -77,19 +85,33 @@ public class RegisterServlet extends HttpServlet {
 		}
 
 		UserService userService = UserServiceImpl.getInstanve();
-
+		ProductService productService = ProductServiceImpl.getInstance();
 		User user2 = null;
 		try {
 			user2 = userService.addUser(user);
-			System.out.println(user2);
 			if (user2 != null) {
 				HttpSession httpSession = req.getSession();
+				ServletContext serviceContext = req.getServletContext();
+				List<Product> products = productService.getProducts();
+				System.out.println("printing products: "+products);
+				serviceContext.setAttribute("productList", products);
+
 				httpSession.setAttribute("user", user2);
+
 				RequestDispatcher dispatcher = req.getRequestDispatcher("WEB-INF/views/dashboard.jsp");
 				dispatcher.forward(req, resp);
 			}
 
 		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (DataNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvalidIdException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvalidPriceException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
